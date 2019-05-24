@@ -1,0 +1,5 @@
+{
+	staticBikeRental: true,
+	osmoscopeAnnotations: true,
+	extraEdgesStopPlatformLink: true
+}

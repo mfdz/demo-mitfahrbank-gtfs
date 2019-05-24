@@ -1,0 +1,4 @@
+stop_id,stop_name,stop_url,stop_lat,stop_lon
+ST1,Mitfahrbank Nersingen Seyboldt,https://commons.wikimedia.org/wiki/File:Mitfahrbank_Nersingen_Seybold_01.jpg,48.4289217,10.1220101
+ST2,Mitfahrbank Oberfahlheim Brücke,https://commons.wikimedia.org/wiki/File:Mitfahrbank_Oberfahlheim_Brücke.jpg,48.4295964,10.1438063
+ST3,Mitfahrbank Unterfahlheim Flurweg,https://commons.wikimedia.org/wiki/File:Mitfahrbank_Unterfahlheim_Flurweg_01.jpg,48.4289574,10.1603

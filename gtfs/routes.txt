@@ -1,0 +1,2 @@
+route_id,route_long_name,route_type 
+R1,Mitfahrverbindung Nersingen - Unterfahlheim,1700

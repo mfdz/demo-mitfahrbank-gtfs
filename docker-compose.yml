@@ -1,0 +1,12 @@
+version: '3'
+services:
+  otp:
+    container_name: opentripplanner
+    image: "mfdz/opentripplanner"
+    ports:
+     - "8080:8080"
+    environment: 
+      JAVA_MX: 2G
+    volumes:
+      - "$PWD/data:/var/otp/"
+    command: otp --build /var/otp --preFlight

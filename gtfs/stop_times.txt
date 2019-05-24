@@ -1,0 +1,7 @@
+trip_id,service_id,arrival_time,departure_time,stop_id,stop_sequence,pickup_type,drop_off_type
+T1,ALL_DAYS,06:00:00,06:00:00,ST1,1,0,0
+T1,ALL_DAYS,06:02:00,06:02:00,ST2,1,0,0
+T1,ALL_DAYS,06:04:00,06:04:00,ST3,1,0,0
+T2,ALL_DAYS,06:00:00,06:00:00,ST3,1,0,0
+T2,ALL_DAYS,06:02:00,06:02:00,ST2,1,0,0
+T2,ALL_DAYS,06:04:00,06:04:00,ST1,1,0,0

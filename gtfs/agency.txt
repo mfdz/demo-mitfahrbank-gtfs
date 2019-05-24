@@ -1,0 +1,2 @@
+agency_id,agency_name,agency_url,agency_timezone
+A1,Mitfahrbänke Nersingen,https://www.augsburger-allgemeine.de/neu-ulm/Per-Anhalter-durch-die-Gemeinde-id54321911.html,Europe/Berlin
