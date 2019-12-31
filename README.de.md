@@ -13,7 +13,7 @@ OpenTripPlanner kann Fahplandaten im sogenannten General Transit Feed Specificat
 Ein solcher Feed besteht aus mehreren Textdateien im CSV-Format, die in einer Zip-Datei zusammengefasst sind.
 Wir legen die folgenden Dateien alle in einem Ordner ```gtfs``` an.
 
-###stops.txt
+### stops.txt
 Beginnen wir mit der stops.txt-Datei, in der die Lage unserer Mitfahrbank und möglicher Ziele erfassen. Die Koordinaten und die optionale stop_url übernehmen wir aus OpenStreetMap http://overpass-turbo.eu/s/IZW.
 
 ```
@@ -23,7 +23,7 @@ ST2,Mitfahrbank Oberfahlheim Brücke,https://commons.wikimedia.org/wiki/File:Mit
 ST3,Mitfahrbank Unterfahlheim Flurweg,https://commons.wikimedia.org/wiki/File:Mitfahrbank_Unterfahlheim_Flurweg_01.jpg,48.4289574,10.1603
 ```
 
-###routes.txt
+### routes.txt
 Die nächste erforrderliche Datei ist die routes.txt https://developers.google.com/transit/gtfs/reference/#routestxt. 
 In ihr beschreiben wir die Mitfahrverbindungen zwischen unseren eben angelegten Stops. Für Mitfahren bzw. Trampen existiert derzeit
 kein offizieller route_type, der allerdings verpflichtend anzugeben ist. Für MFDZ haben wir uns temporär damit beholfen, OTP zu patchen und
@@ -35,7 +35,7 @@ route_id,route_long_name,route_type
 R1,Mitfahrverbindung Nersingen - Unterfahlheim,1700
 ```
 
-###calendar.txt
+### calendar.txt
 Die calender.txt definiert, an welchen Wochentagen ein bestimmter Takt (Service) gilt. Für dieses Beispiel vereinfachen wir und unterstellen, dass alle von uns gleich definierten Wartezeiten ganzjährig in 2019 an allen Tagen der Woche identisch seien. Die service_id ist frei wählbar. Wir verwenden die sprechende ID ALL_DAYS.
 
 ```
@@ -43,16 +43,16 @@ service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,e
 ALL_DAYS,1,1,1,1,1,1,1,20190101,20191231
 ```
 
-###trips.txt
+### trips.txt
 Die trips.txt beschreibt regelmäßig in gleicher Form wiederkehrende Fahrten, das heißt, jeder Trip besitzt gleiche Eigenschaften (wie z.B. Fahrradmitnahme erlaubt/untersagt) sowie - an anderer Stelle definierte - gleiche Abfolgen angefahrener Haltestellen. Wir definieren Hin- und Rückfahrt der Route Nersingen - Unterfahlheim und untersagen die Fahrrad-Mitnahme.
 
 ```
 route_id,service_id,trip_id,trip_headsign,direction,bikes_allowed
-R1,ALL_DAYS,T1,Unterfahlheim,0,0
-R1,ALL_DAYS,T2,Nersingen,1,0
+R1,ALL_DAYS,T1,Unterfahlheim,0,2
+R1,ALL_DAYS,T2,Nersingen,1,2
 ```
 
-###stop_times.txt
+### stop_times.txt
 In der stop_times.txt werden die Halte-Folgen und zugehörigen Abfahrtszeiten einer Fahrt beschrieben.
 Für unseren Frequenz-basierten Fahrplan reicht es aus, eine Fahrt anzugegen, deren Dauern zwischen den Halten dann für alle regelmäßigen Fahrten angenommen werden. Um die Dauern zu bestimmen, nutzen wir GraphHopper/OpenStreetMap https://graphhopper.com/maps/?point=48.428973%2C10.160336&point=Oberfahlheim%2C%2089278%2C%20Deutschland&point=48.428859%2C10.121841&locale=de-DE&vehicle=car&weighting=fastest&elevation=true&use_miles=false&layer=Omniscale. 
 
@@ -66,7 +66,7 @@ T2,ALL_DAYS,6:02:00,6:02:00,ST2,1,0,0
 T2,ALL_DAYS,6:04:00,6:04:00,ST1,1,0,0
 ```
 
-###frequencies.txt
+### frequencies.txt
 Und nun kommen wir zur Gretchenfrage: Wie lange muss jemand zu welcher Tageszeit warten, bis ein Auto hält und er/sie mitgenommen wird?
 Für dieses Beispiel nehmen wir an, dass es morgens im Berufsverkehr im Schnitt 5 Minuten dauert, den Rest des Tages jedoch 15 Minuten. 
 Wir nutzen das GTFS-Konstrukt der sogenannten "Frequenz-basierten" Fahrten in GTFS, das die Abbildung von getakteten Verkehren ohne feste Uhrzeiten ermöglicht. OpenTripPlanner plant exakt die angegebene Taktzeit als Wartezeit ein. Damit bleibt es nun uns überlassen, ob wir eher einen größeren Puffer und dafür aber vielleicht auch realistischere Anschlüsse bevorzugen, oder ob uns eine 50% Wahrscheinlichkeit ausreicht. Wir sind mal lieber vorsichtig und verdoppeln die mittlere Wartezeit. Aber das könnte ja mal untersucht werden...  
@@ -79,7 +79,7 @@ T2,06:00,08:30,600
 T2,08:30,19:00,1800
 ```
 
-###agency.txt
+### agency.txt
 Zu guter letzt fordert die GTFS-Spezifikation Angaben zum Verkehrsverbund/-unternehmen, das die Fahrten anbietet. Bei unserer Mitfahrbank gibt es eigentlich keinen Betreiber, aber zumindest einen Zeitungsbericht mit allgemeinen Informationen zum Projekt können wir als agency_url angeben.
 
 ```
@@ -103,7 +103,7 @@ Dieses kann man z.B. über den Browser oder mittels wget oder curl herunterladen
 curl http://download.geofabrik.de/europe/germany/bayern/schwaben-latest.osm.pbf > schwaben.latest.osm.pbf
 ```
 
-##OpenTripPlanner
+## OpenTripPlanner
 Um den OpenTripPlanner zu installieren, kann man entweder das github-Repository auschecken und ihn selber bauen, oder ein von uns gebautes Docker-Image verwenden.
 
 Wir verwenden ein fertiges Docker-Image der MFDZ-Variante des OpenTripPlanners und starten ihn mittels docker-compose. Unser docker-compose.yml sieht so aus:
@@ -111,14 +111,16 @@ Wir verwenden ein fertiges Docker-Image der MFDZ-Variante des OpenTripPlanners u
 version: '3'
 services:
   otp:
-    container_name: opentrripplanner
-    image: "mfdz:otp"
+    container_name: opentripplanner
+    image: "mfdz/opentripplanner"
     ports:
      - "8080:8080"
     environment: 
+      JAVA_MX: 2G
     volumes:
       - "$PWD/data:/var/otp/"
-
+    command: otp --build /var/otp --preFlight
+    
 Bevor wir es starten, legen wir noch die eben erzeugte gtfs.zip und die heruntergeladene pbf-Datei in ein `data`-Verzeichnis.
 
  und rufen dann 
@@ -163,8 +165,3 @@ http://localhost:8080/otp/routers/default/plan?fromPlace=48.428915792143506%2C10
 ## Troubleshooting
 ### Eine meiner Mitfahrbänke wird in der Karte nicht angezeigt und auch nicht bei der Verbindungssuche genutzt.
 Nochmals sorgfältig kontrollieren, ob alle CSV-Dateien mit einem CR/CRLF abschließen, da sonst ggf. die letzte Zeile nicht erkannt wird.
-
-
-
-
-
